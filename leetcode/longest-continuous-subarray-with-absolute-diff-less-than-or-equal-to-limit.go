@@ -3,28 +3,25 @@
 
 package leetcode
 
-import "container/list"
-
 func longestSubarray(nums []int, limit int) int {
-	minq := list.New()
-	maxq := list.New()
+	minq, maxq := []int{}, []int{}
 	left := 0
 	right := 0
 	for ; right < len(nums); right++ {
-		for minq.Len() > 0 && minq.Back().Value.(int) > nums[right] {
-			minq.Remove(minq.Back())
+		for len(minq) > 0 && minq[len(minq)-1] > nums[right] {
+			minq = minq[:len(minq)-1]
 		}
-		minq.PushBack(nums[right])
-		for maxq.Len() > 0 && maxq.Back().Value.(int) < nums[right] {
-			maxq.Remove(maxq.Back())
+		minq = append(minq, nums[right])
+		for len(maxq) > 0 && maxq[len(maxq)-1] < nums[right] {
+			maxq = maxq[:len(maxq)-1]
 		}
-		maxq.PushBack(nums[right])
-		if maxq.Front().Value.(int)-minq.Front().Value.(int) > limit {
-			if minq.Front().Value.(int) == nums[left] {
-				minq.Remove(minq.Front())
+		maxq = append(maxq, nums[right])
+		if maxq[0]-minq[0] > limit {
+			if minq[0] == nums[left] {
+				minq = minq[1:]
 			}
-			if maxq.Front().Value.(int) == nums[left] {
-				maxq.Remove(maxq.Front())
+			if maxq[0] == nums[left] {
+				maxq = maxq[1:]
 			}
 			left++
 		}
