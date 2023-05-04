@@ -4,30 +4,18 @@
 package leetcode
 
 func romanToInt(s string) int {
-	current, prev, ans := 0, 0, 0
+	chars := map[string]int{"M": 1000, "D": 500, "C": 100, "L": 50, "X": 10, "V": 5, "I": 1}
+	current := 0
+	prev := 0
+	ans := 0
 	for i := len(s) - 1; i >= 0; i-- {
-		switch ch := s[i]; ch {
-		case 'M':
-			current = 1000
-		case 'D':
-			current = 500
-		case 'C':
-			current = 100
-		case 'L':
-			current = 50
-		case 'X':
-			current = 10
-		case 'V':
-			current = 5
-		case 'I':
-			current = 1
-		}
+		current = chars[string(s[i])]
 		if current < prev {
 			ans -= current
 		} else {
 			ans += current
+			prev = current
 		}
-		prev = current
 	}
 	return ans
 }
