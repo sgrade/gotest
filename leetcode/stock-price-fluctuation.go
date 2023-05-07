@@ -32,17 +32,11 @@ type StockPrice struct {
 }
 
 func Constructor() StockPrice {
-	tsToPrice := make(map[int]int)
-	minHeap := &MinHeap{}
-	maxHeap := &MinHeap{}
-	currentPrice := 1000000000
-	currentTimestamp := 0
 	return StockPrice{
-		tsToPrice:        tsToPrice,
-		minHeap:          minHeap,
-		maxHeap:          maxHeap,
-		currentPrice:     currentPrice,
-		currentTimestamp: currentTimestamp}
+		tsToPrice: make(map[int]int),
+		minHeap:   &MinHeap{},
+		maxHeap:   &MinHeap{},
+	}
 }
 
 func (sp *StockPrice) Update(timestamp int, price int) {
