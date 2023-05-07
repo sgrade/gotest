@@ -18,41 +18,41 @@ func maxKilledEnemies(grid [][]byte) int {
 		dp[row] = make([]int, cols)
 	}
 
-	for row_idx := range grid {
+	for rowIdx := range grid {
 		enemies := 0
-		empty_cells := []int{}
-		for col_idx := 0; col_idx <= cols; col_idx++ {
-			if col_idx == cols || grid[row_idx][col_idx] == 'W' {
-				for _, idx := range empty_cells {
-					dp[row_idx][idx] = enemies
+		emptyCells := []int{}
+		for colIdx := 0; colIdx <= cols; colIdx++ {
+			if colIdx == cols || grid[rowIdx][colIdx] == 'W' {
+				for _, idx := range emptyCells {
+					dp[rowIdx][idx] = enemies
 				}
 				enemies = 0
-				empty_cells = empty_cells[:0]
-			} else if grid[row_idx][col_idx] == 'E' {
+				emptyCells = emptyCells[:0]
+			} else if grid[rowIdx][colIdx] == 'E' {
 				enemies++
 			} else {
-				empty_cells = append(empty_cells, col_idx)
+				emptyCells = append(emptyCells, colIdx)
 			}
 		}
 	}
 
-	for col_idx := 0; col_idx < cols; col_idx++ {
+	for colIdx := 0; colIdx < cols; colIdx++ {
 		enemies := 0
-		empty_cells := []int{}
-		for row_idx := 0; row_idx <= rows; row_idx++ {
-			if row_idx == rows || grid[row_idx][col_idx] == 'W' {
-				for _, idx := range empty_cells {
-					dp[idx][col_idx] += enemies
-					if dp[idx][col_idx] > ans {
-						ans = dp[idx][col_idx]
+		emptyCells := []int{}
+		for rowIdx := 0; rowIdx <= rows; rowIdx++ {
+			if rowIdx == rows || grid[rowIdx][colIdx] == 'W' {
+				for _, idx := range emptyCells {
+					dp[idx][colIdx] += enemies
+					if dp[idx][colIdx] > ans {
+						ans = dp[idx][colIdx]
 					}
 				}
 				enemies = 0
-				empty_cells = empty_cells[:0]
-			} else if grid[row_idx][col_idx] == 'E' {
+				emptyCells = emptyCells[:0]
+			} else if grid[rowIdx][colIdx] == 'E' {
 				enemies++
 			} else {
-				empty_cells = append(empty_cells, row_idx)
+				emptyCells = append(emptyCells, rowIdx)
 			}
 		}
 	}

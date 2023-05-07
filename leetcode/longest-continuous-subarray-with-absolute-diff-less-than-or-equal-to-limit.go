@@ -4,24 +4,24 @@
 package leetcode
 
 func longestSubarray(nums []int, limit int) int {
-	minq, maxq := []int{}, []int{}
+	minQ, maxQ := []int{}, []int{}
 	left := 0
 	right := 0
 	for ; right < len(nums); right++ {
-		for len(minq) > 0 && minq[len(minq)-1] > nums[right] {
-			minq = minq[:len(minq)-1]
+		for len(minQ) > 0 && minQ[len(minQ)-1] > nums[right] {
+			minQ = minQ[:len(minQ)-1]
 		}
-		minq = append(minq, nums[right])
-		for len(maxq) > 0 && maxq[len(maxq)-1] < nums[right] {
-			maxq = maxq[:len(maxq)-1]
+		minQ = append(minQ, nums[right])
+		for len(maxQ) > 0 && maxQ[len(maxQ)-1] < nums[right] {
+			maxQ = maxQ[:len(maxQ)-1]
 		}
-		maxq = append(maxq, nums[right])
-		if maxq[0]-minq[0] > limit {
-			if minq[0] == nums[left] {
-				minq = minq[1:]
+		maxQ = append(maxQ, nums[right])
+		if maxQ[0]-minQ[0] > limit {
+			if minQ[0] == nums[left] {
+				minQ = minQ[1:]
 			}
-			if maxq[0] == nums[left] {
-				maxq = maxq[1:]
+			if maxQ[0] == nums[left] {
+				maxQ = maxQ[1:]
 			}
 			left++
 		}
