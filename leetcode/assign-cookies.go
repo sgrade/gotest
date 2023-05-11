@@ -8,13 +8,14 @@ import "sort"
 func findContentChildren(g []int, s []int) int {
 	sort.Ints(g)
 	sort.Ints(s)
-	sIdx, gIdx, ans := len(s)-1, len(g)-1, 0
-	for sIdx >= 0 && gIdx >= 0 {
+	sIdx, gIdx, ans := 0, 0, 0
+	lenS, lenG := len(s), len(g)
+	for sIdx < lenS && gIdx < lenG {
 		if s[sIdx] >= g[gIdx] {
-			sIdx--
+			gIdx++
 			ans++
 		}
-		gIdx--
+		sIdx++
 	}
 	return ans
 }
