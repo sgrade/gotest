@@ -3,7 +3,7 @@
 
 package leetcode
 
-// Based on Editorial's Approach 3: Yale Format
+// Based on Editorial's Approach 3: Yale Format. Optimized with ideas from Leetcode's Sample 0 ms submission.
 func multiply(mat1 [][]int, mat2 [][]int) [][]int {
 	rows, cols := len(mat1), len(mat2[0])
 	ans := make([][]int, rows)
@@ -30,7 +30,6 @@ func multiply(mat1 [][]int, mat2 [][]int) [][]int {
 					mat1RowStart++
 					mat2ColStart++
 				}
-
 			}
 		}
 	}
@@ -39,43 +38,35 @@ func multiply(mat1 [][]int, mat2 [][]int) [][]int {
 }
 
 type sparseMatrix struct {
-	rows                       int
-	cols                       int
 	values, colIndex, rowIndex []int
 }
 
 // CSR - Compressed Sparse Row
 func newCsr(matrix [][]int) *sparseMatrix {
-	sm := &sparseMatrix{}
-	sm.rows = len(matrix)
-	sm.cols = len(matrix[0])
-	sm.rowIndex = append(sm.rowIndex, 0)
-	for row := 0; row < sm.rows; row++ {
-		for col := 0; col < sm.cols; col++ {
-			if matrix[row][col] != 0 {
-				sm.values = append(sm.values, matrix[row][col])
-				sm.colIndex = append(sm.colIndex, col)
+	values, colIndex, rowIndex := []int{}, []int{}, []int{0}
+	for row := range matrix {
+		for col, num := range matrix[row] {
+			if num != 0 {
+				values = append(values, num)
+				colIndex = append(colIndex, col)
 			}
 		}
-		sm.rowIndex = append(sm.rowIndex, len(sm.values))
+		rowIndex = append(rowIndex, len(values))
 	}
-	return sm
+	return &sparseMatrix{values, colIndex, rowIndex}
 }
 
 // CSC - Compressed Sparse Column
 func newCsc(matrix [][]int) *sparseMatrix {
-	sm := &sparseMatrix{}
-	sm.rows = len(matrix)
-	sm.cols = len(matrix[0])
-	sm.colIndex = append(sm.colIndex, 0)
-	for col := 0; col < sm.cols; col++ {
-		for row := 0; row < sm.rows; row++ {
+	values, colIndex, rowIndex := []int{}, []int{0}, []int{}
+	for col := range matrix[0] {
+		for row := range matrix {
 			if matrix[row][col] != 0 {
-				sm.values = append(sm.values, matrix[row][col])
-				sm.rowIndex = append(sm.rowIndex, row)
+				values = append(values, matrix[row][col])
+				rowIndex = append(rowIndex, row)
 			}
 		}
-		sm.colIndex = append(sm.colIndex, len(sm.values))
+		colIndex = append(colIndex, len(values))
 	}
-	return sm
+	return &sparseMatrix{values, colIndex, rowIndex}
 }
