@@ -1,7 +1,7 @@
 // 2034. Stock Price Fluctuation
 // https://leetcode.com/problems/stock-price-fluctuation/
 
-package leetcode
+package stockpricefluctuation
 
 import "container/heap"
 

@@ -1,7 +1,7 @@
 // 311. Sparse Matrix Multiplication
 // https://leetcode.com/problems/sparse-matrix-multiplication/
 
-package leetcode
+package sparsematrixmultiplication
 
 // Based on Editorial's Approach 3: Yale Format. Optimized with ideas from Leetcode's Sample 0 ms submission.
 func multiply(mat1 [][]int, mat2 [][]int) [][]int {

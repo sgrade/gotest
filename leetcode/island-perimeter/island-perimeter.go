@@ -1,7 +1,7 @@
 // 463. Island Perimeter
 // https://leetcode.com/problems/island-perimeter/
 
-package leetcode
+package islandperimeter
 
 func islandPerimeter(grid [][]int) int {
 	ans, rows, cols := 0, len(grid), len(grid[0])

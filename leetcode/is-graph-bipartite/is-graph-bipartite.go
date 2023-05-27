@@ -1,7 +1,7 @@
 // 785. Is Graph Bipartite?
 // https://leetcode.com/problems/is-graph-bipartite/
 
-package leetcode
+package isgraphbipartite
 
 func isBipartite(graph [][]int) bool {
 	n := len(graph)

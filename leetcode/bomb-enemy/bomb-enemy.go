@@ -1,7 +1,7 @@
 // 361. Bomb Enemy
 // https://leetcode.com/problems/bomb-enemy/
 
-package leetcode
+package bombenemy
 
 // Optimized with Leetcode's Python Sample 615 ms submission
 func maxKilledEnemies(grid [][]byte) int {
