@@ -3,23 +3,18 @@
 
 package nextgreaterelementi
 
-import "github.com/emirpasic/gods/stacks/arraystack"
-
 func nextGreaterElement(nums1 []int, nums2 []int) []int {
-	st := arraystack.New()
-	mp := make(map[int]int)
+	st := []int{}
+	mp := map[int]int{}
 	for _, el := range nums2 {
-		top, _ := st.Peek()
-		for !st.Empty() && el > top.(int) {
-			prev, _ := st.Pop()
-			mp[prev.(int)] = el
-			top, _ = st.Peek()
+		for len(st) > 0 && el > st[len(st)-1] {
+			mp[st[len(st)-1]] = el
+			st = st[:len(st)-1]
 		}
-		st.Push(el)
+		st = append(st, el)
 	}
-	for !st.Empty() {
-		prev, _ := st.Pop()
-		mp[prev.(int)] = -1
+	for i := len(st) - 1; i >= 0; i-- {
+		mp[st[i]] = -1
 	}
 	for i := range nums1 {
 		nums1[i] = mp[nums1[i]]
