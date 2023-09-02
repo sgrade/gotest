@@ -14,27 +14,17 @@ public:
         while (i < n && sensor1[i] == sensor2[i])
             ++i;
         
-        if (i == n)
+        if (i >= n - 1)
             return -1;
-
-        vector<int> v1, v2;
-
-        v1 = {sensor1.begin(), sensor1.end() - 1};
-        v2 = {sensor2.begin(), sensor2.end() - 1};
-        if (v1 == v2)
-            return -1; 
         
-        bool can_be_one = false, can_be_two = false;
-
-        v1 = {sensor1.begin() + i, sensor1.end() - 1};
-        v2 = {sensor2.begin() + i + 1, sensor2.end()};
-        if (v1 == v2)
-            can_be_one = true;
-        
-        v1 = {sensor1.begin() + i + 1, sensor1.end()};
-        v2 = {sensor2.begin() + i, sensor2.end() - 1};
-        if (v1 == v2)
-            can_be_two = true;
+        // Optimized with an idea from a sample solution
+        bool can_be_one = true, can_be_two = true;
+        for (; i < n - 1; ++i) {
+            if (can_be_one && sensor1[i] != sensor2[i + 1])
+                can_be_one = false;
+            if (can_be_two && sensor2[i] != sensor1[i + 1])
+                can_be_two = false;
+        }
 
         if (can_be_one && can_be_two)
             return -1;
