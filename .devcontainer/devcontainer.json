@@ -4,6 +4,8 @@
 	"name": "Go",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
 	"image": "mcr.microsoft.com/devcontainers/go:0-1-bullseye",
+	"workspaceFolder": "/go/src/github.com/sgrade/gotest",
+    "workspaceMount": "source=${localWorkspaceFolder},target=/go/src/github.com/sgrade/gotest,type=bind",
 	"customizations": {
 		"vscode": {
 			"extensions": [

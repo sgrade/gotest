@@ -1,4 +1,4 @@
-module gotest
+module github.com/sgrade/gotest
 
 go 1.20
 
