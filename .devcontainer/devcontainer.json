@@ -1,20 +1,17 @@
-// For format details, see https://aka.ms/devcontainer.json. For config options, see the
-// README at: https://github.com/devcontainers/templates/tree/main/src/go
-
 {
     "name": "Go",
     "workspaceFolder": "/gotest",
-    "workspaceMount": "source=${localWorkspaceFolder},target=/gotest,type=bind",
+    // "workspaceMount": "source=${localWorkspaceFolder},target=/gotest,type=bind",
 	"build": {
         "dockerfile": "./Dockerfile",
         "context": "."
     },
     "features": {
         "ghcr.io/devcontainers/features/common-utils:2": {
-            "installZsh": "true",
-            "username": "vscode",
-            "userUid": "1000",
-            "userGid": "1000",
+            // "installZsh": "true",
+            // "username": "vscode",
+            // "userUid": "1000",
+            // "userGid": "1000",
             "upgradePackages": "true"
         },
         "ghcr.io/devcontainers/features/go:1": {
@@ -39,13 +36,14 @@
         "vscode": {
             // Set *default* container specific settings.json values on container create.
             "settings": {
-                // "go.toolsManagement.checkForUpdates": "local",
-                "go.useLanguageServer": true
-                // "go.gopath": "/go"
+                "go.toolsManagement.checkForUpdates": "local",
+                "go.useLanguageServer": true,
+                "go.gopath": "/go"
             },
             // Add the IDs of extensions you want installed when the container is created.
             "extensions": [
-                "golang.Go"
+                "golang.Go",
+                "ms-azuretools.vscode-docker"
             ]
         }
     },
@@ -54,8 +52,8 @@
 
     // Use 'postCreateCommand' to run commands after the container is created.
     // "postCreateCommand": "go version",
-    "postCreateCommand": "go mod tidy",
+    "postCreateCommand": "go mod tidy"
 
     // Set `remoteUser` to `root` to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
-    "remoteUser": "vscode"
+    // "remoteUser": "vscode"
 }

@@ -1,5 +1,5 @@
 module github.com/sgrade/gotest
 
-go 1.21.5
+go 1.23
 
 require github.com/emirpasic/gods v1.18.1

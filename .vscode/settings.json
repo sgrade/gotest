@@ -1,11 +1,16 @@
 {
-    "gopls": { 
-        // Below is from the docs
-        // https://code.visualstudio.com/docs/languages/go#_semantic-syntax-highlighting
-        "ui.semanticTokens": true,
+  "gopls": {
+    // Below is from the docs
+    // https://code.visualstudio.com/docs/languages/go#_semantic-syntax-highlighting
+    "ui.semanticTokens": true,
 
-        // Below is to avoid the following warning for leetcode exercises
-        // "func is unused (U1000) go-staticcheck"
-        "ui.diagnostic.staticcheck": false
+    // Below is to avoid the following warning for leetcode exercises
+    // "func is unused (U1000) go-staticcheck"
+    "ui.diagnostic.staticcheck": false,
+
+    // Disable gopls unused function warnings
+    "ui.diagnostic.analyses": {
+      "unusedfunc": false
     }
+  }
 }
