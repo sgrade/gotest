@@ -5,11 +5,18 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Launch Server",
+            "name": "Debug Tests in Current Directory",
+            "type": "go",
+            "request": "launch",
+            "mode": "test",
+            "program": "${fileDirname}"
+        },
+        {
+            "name": "Launch Current File (requires main)",
             "type": "go",
             "request": "launch",
             "mode": "debug",
-            "program": "${workspaceFolder}/test.go"
+            "program": "${file}"
         }
     ]
 }
