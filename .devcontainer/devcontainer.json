@@ -1,7 +1,5 @@
 {
     "name": "Go",
-    "workspaceFolder": "/gotest",
-    // "workspaceMount": "source=${localWorkspaceFolder},target=/gotest,type=bind",
 	"build": {
         "dockerfile": "./Dockerfile",
         "context": "."
