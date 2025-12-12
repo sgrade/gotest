@@ -10,45 +10,56 @@ import (
 )
 
 func countMentions(numberOfUsers int, events [][]string) []int {
+	const (
+		eventMessage = "MESSAGE"
+		targetAll    = "ALL"
+		targetHere   = "HERE"
+	)
+
+	// Parse timestamps once during sorting
 	sort.Slice(events, func(i, j int) bool {
 		timeI, _ := strconv.Atoi(events[i][1])
 		timeJ, _ := strconv.Atoi(events[j][1])
 
-		// Primary: sort by timestamp
 		if timeI != timeJ {
 			return timeI < timeJ
 		}
-		// Secondary: OFFLINE (not MESSAGE) comes before MESSAGE
-		// In Python: True > False, so MESSAGE sorts after
-		return events[i][0] != "MESSAGE" && events[j][0] == "MESSAGE"
+		// OFFLINE comes before MESSAGE at same timestamp
+		return events[i][0] != eventMessage && events[j][0] == eventMessage
 	})
 
 	counter := make([]int, numberOfUsers)
 	nextOnline := make([]int, numberOfUsers)
+
 	for _, event := range events {
 		curTime, _ := strconv.Atoi(event[1])
-		if event[0] == "MESSAGE" {
-			if event[2] == "ALL" {
-				for userId := range numberOfUsers {
-					counter[userId]++
+
+		if event[0] == eventMessage {
+			switch event[2] {
+			case targetAll:
+				for userID := range numberOfUsers {
+					counter[userID]++
 				}
-			} else if event[2] == "HERE" {
-				for userId, nextOnlineTime := range nextOnline {
+			case targetHere:
+				for userID, nextOnlineTime := range nextOnline {
 					if nextOnlineTime <= curTime {
-						counter[userId]++
+						counter[userID]++
 					}
 				}
-			} else {
+			default:
+				// Specific user mentions
 				parts := strings.Fields(event[2])
 				for _, strID := range parts {
-					userID, _ := strconv.Atoi(strID[2:])
+					userID, _ := strconv.Atoi(strings.TrimPrefix(strID, "id"))
 					counter[userID]++
 				}
 			}
 		} else {
+			// OFFLINE event
 			userID, _ := strconv.Atoi(event[2])
 			nextOnline[userID] = curTime + 60
 		}
 	}
+
 	return counter
 }
