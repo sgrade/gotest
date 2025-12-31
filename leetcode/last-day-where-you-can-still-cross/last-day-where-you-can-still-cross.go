@@ -5,6 +5,8 @@ package lastdaywhereyoucanstillcross
 
 // Based on Editorial's Approach 3: Disjoint Set Union (on land cells)
 
+var directions = [][]int{{0, 1}, {0, -1}, {1, 0}, {-1, 0}}
+
 // UnionFind (Disjoint Set Union / Union-Find)
 type UnionFind struct {
 	parent []int
@@ -62,28 +64,38 @@ func latestDayToCross(row int, col int, cells [][]int) int {
 		}
 	}
 
-	directions := [][]int{{0, 1}, {0, -1}, {1, 0}, {-1, 0}}
+	const (
+		water = 1
+		land  = 0
+	)
+
+	topNode := 0
+	bottomNode := row*col + 1
 
 	for day := len(cells) - 1; day >= 0; day-- {
 		r := cells[day][0] - 1
 		c := cells[day][1] - 1
-		grid[r][c] = 0
-		idx1 := r*col + c + 1
+		grid[r][c] = land
+		currIdx := r*col + c + 1
+
 		for _, dir := range directions {
-			newR := r + dir[0]
-			newC := c + dir[1]
-			idx2 := newR*col + newC + 1
-			if newR >= 0 && newR < row && newC >= 0 && newC < col && grid[newR][newC] == 0 {
-				dsu.Union(idx1, idx2)
+			newR, newC := r+dir[0], c+dir[1]
+			if newR < 0 || newR >= row || newC < 0 || newC >= col {
+				continue
+			}
+			if grid[newR][newC] == land {
+				neighborIdx := newR*col + newC + 1
+				dsu.Union(currIdx, neighborIdx)
 			}
 		}
+
 		if r == 0 {
-			dsu.Union(0, idx1)
+			dsu.Union(topNode, currIdx)
 		}
 		if r == row-1 {
-			dsu.Union(row*col+1, idx1)
+			dsu.Union(bottomNode, currIdx)
 		}
-		if dsu.Find(0) == dsu.Find(row*col+1) {
+		if dsu.Find(topNode) == dsu.Find(bottomNode) {
 			return day
 		}
 	}
