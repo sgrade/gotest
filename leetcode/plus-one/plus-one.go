@@ -3,23 +3,14 @@
 
 package plusone
 
-import "slices"
-
 func plusOne(digits []int) []int {
-	slices.Reverse(digits)
-	carry := 1
-	for i := range digits {
-		digits[i] += carry
-		if digits[i] > 9 {
+	for i := len(digits) - 1; i >= 0; i-- {
+		digits[i]++
+		if digits[i] == 10 {
 			digits[i] = 0
-			carry = 1
 		} else {
-			carry = 0
+			return digits
 		}
 	}
-	if carry == 1 {
-		digits = append(digits, 1)
-	}
-	slices.Reverse(digits)
-	return digits
+	return append([]int{1}, digits...)
 }
