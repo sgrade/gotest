@@ -13,12 +13,12 @@ func newTrie() *Trie {
 }
 
 func add(node *Trie, word string, index *int) int {
-	for _, c := range word {
-		i := c - 'a'
-		if node.children[i] == nil {
-			node.children[i] = newTrie()
+	for i := 0; i < len(word); i++ {
+		idx := word[i] - 'a'
+		if node.children[idx] == nil {
+			node.children[idx] = newTrie()
 		}
-		node = node.children[i]
+		node = node.children[idx]
 	}
 	if node.id == -1 {
 		*index++
@@ -27,41 +27,56 @@ func add(node *Trie, word string, index *int) int {
 	return node.id
 }
 
-func update(current *int64, newVal int64) {
-	if *current == -1 || newVal < *current {
-		*current = newVal
-	}
-}
-
 func minimumCost(source string, target string, original []string, changed []string, cost []int) int64 {
 	n := len(source)
 	numStrings := len(original)
 	root := newTrie()
-
 	idx := -1
-	nodeCount := numStrings * 2
-	graph := make([][]int, nodeCount)
+
+	// Build trie and collect conversion edges
+	type edge struct {
+		from, to, cost int
+	}
+	edges := make([]edge, numStrings)
+	for i := 0; i < numStrings; i++ {
+		fromID := add(root, original[i], &idx)
+		toID := add(root, changed[i], &idx)
+		edges[i] = edge{fromID, toID, cost[i]}
+	}
+
+	// Allocate graph with actual size
+	size := idx + 1
+	const inf = math.MaxInt32 / 2
+	graph := make([][]int, size)
 	for i := range graph {
-		graph[i] = make([]int, nodeCount)
+		graph[i] = make([]int, size)
 		for j := range graph[i] {
-			graph[i][j] = math.MaxInt32 / 2
+			graph[i][j] = inf
 		}
 		graph[i][i] = 0
 	}
 
-	// Add all strings to trie and populate graph with conversion costs
+	// Populate graph with conversion costs
 	for i := 0; i < numStrings; i++ {
-		fromID := add(root, original[i], &idx)
-		toID := add(root, changed[i], &idx)
-		graph[fromID][toID] = min(graph[fromID][toID], cost[i])
+		e := edges[i]
+		if e.cost < graph[e.from][e.to] {
+			graph[e.from][e.to] = e.cost
+		}
 	}
 
-	// Floyd-Warshall to find shortest paths
-	size := idx + 1
+	// Floyd-Warshall with early termination
 	for k := 0; k < size; k++ {
 		for i := 0; i < size; i++ {
+			if graph[i][k] == inf {
+				continue
+			}
 			for j := 0; j < size; j++ {
-				graph[i][j] = min(graph[i][j], graph[i][k]+graph[k][j])
+				if graph[k][j] == inf {
+					continue
+				}
+				if newDist := graph[i][k] + graph[k][j]; newDist < graph[i][j] {
+					graph[i][j] = newDist
+				}
 			}
 		}
 	}
@@ -82,19 +97,28 @@ func minimumCost(source string, target string, original []string, changed []stri
 		}
 
 		if source[j] == target[j] {
-			update(&dp[j], base)
+			if dp[j] == -1 || base < dp[j] {
+				dp[j] = base
+			}
 		}
 
 		srcNode, tgtNode := root, root
 		for i := j; i < n; i++ {
+			if srcNode == nil || tgtNode == nil {
+				break
+			}
 			srcNode = srcNode.children[source[i]-'a']
 			tgtNode = tgtNode.children[target[i]-'a']
 			if srcNode == nil || tgtNode == nil {
 				break
 			}
-			if srcNode.id != -1 && tgtNode.id != -1 && graph[srcNode.id][tgtNode.id] != math.MaxInt32/2 {
-				newVal := base + int64(graph[srcNode.id][tgtNode.id])
-				update(&dp[i], newVal)
+			if srcNode.id != -1 && tgtNode.id != -1 {
+				if graphCost := graph[srcNode.id][tgtNode.id]; graphCost < inf {
+					newVal := base + int64(graphCost)
+					if dp[i] == -1 || newVal < dp[i] {
+						dp[i] = newVal
+					}
+				}
 			}
 		}
 	}
