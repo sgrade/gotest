@@ -5,3 +5,4 @@ Review the code and apply [Effective Go](https://go.dev/doc/effective_go) and th
 - Package documentation and function documentation are OPTIONAL (the problem comment at the top serves this purpose).
 
 Add minimalistic comments explaining how it works.
+Keep comment with the reference to the Editoria'l solution if exists
