@@ -3,20 +3,20 @@
 
 package minimumcostsusingthetrainline
 
+// minimumCosts uses DP over two states: the cheapest cost to reach the
+// current stop ending on the regular line, and ending on the express line.
+// Switching regular -> express costs expressCost; express -> regular is free.
 func minimumCosts(regular []int, express []int, expressCost int) []int64 {
-	numStops := len(regular)
-	costs := make([]int64, numStops)
+	costs := make([]int64, len(regular))
 
-	totalRegularCost := int64(0)
-	totalExpressCost := int64(expressCost)
+	// Start at stop 0 on the regular line; being on express requires paying to switch.
+	regularCost, expressLineCost := int64(0), int64(expressCost)
 
-	for stop := 0; stop < numStops; stop++ {
-		curRegularCost := min(totalRegularCost, totalExpressCost) + int64(regular[stop])
-		curExpressCost := min(totalRegularCost+int64(expressCost), totalExpressCost) + int64(express[stop])
-
-		totalRegularCost = curRegularCost
-		totalExpressCost = curExpressCost
-		costs[stop] = min(totalRegularCost, totalExpressCost)
+	for i := range regular {
+		regularCost, expressLineCost =
+			min(regularCost, expressLineCost)+int64(regular[i]),
+			min(regularCost+int64(expressCost), expressLineCost)+int64(express[i])
+		costs[i] = min(regularCost, expressLineCost)
 	}
 
 	return costs
